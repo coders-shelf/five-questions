@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MediaCard(props) {
+const MediaCard = props => {
   const { title } = props;
   const classes = useStyles();
 
@@ -37,4 +37,6 @@ export default function MediaCard(props) {
       </CardActionArea>
     </Card>
   );
-}
+};
+
+export default MediaCard;

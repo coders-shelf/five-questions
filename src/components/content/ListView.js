@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Card from "./list/Card";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import MediaCard from "./list/MediaCard";
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -19,10 +21,17 @@ const ListView = props => {
   };
   return (
     <React.Fragment>
+      <Grid item xs={12}>
+        <Box textAlign="center">
+          <Button variant="contained" color="primary">
+            Create
+          </Button>
+        </Box>
+      </Grid>
       {Object.keys(items).map(ky => (
         <Grid item key={ky}>
           <Link to={`/detail/${ky}`} className={classes.link}>
-            <Card title={items[ky]} />
+            <MediaCard title={items[ky]} />
           </Link>
         </Grid>
       ))}
