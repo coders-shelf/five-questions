@@ -1,0 +1,6 @@
+export const CREATE_SUBJECT = "CREATE_SUBJECT";
+export const READ_SUBJECT = "READ_SUBJECT";
+export const UPDATE_SUBJECT = "UPDATE_SUBJECT";
+export const DELETE_SUBJECT = "DELETE_SUBJECT";
+export const GET_SUBJECT = "GET_SUBJECT";
+export const API_FAILED = "API_FAILED";

@@ -3,9 +3,10 @@ import { Switch, Route } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-// import axios from "../../axios";
 import ListView from "../content/ListView";
 import DetailView from "../content/DetailView";
+import SubjectCreate from "../content/form/SubjectCreate";
+import SubjectEdit from "../content/form/SubjectEdit";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +23,20 @@ const Content = props => {
           <Grid container justify="center" className={classes.root}>
             <Grid item xs={12} sm={10} md={8}>
               <DetailView />
+            </Grid>
+          </Grid>
+        </Route>
+        <Route path="/create">
+          <Grid container justify="center" className={classes.root}>
+            <Grid item xs={12} sm={10} md={8}>
+              <SubjectCreate />
+            </Grid>
+          </Grid>
+        </Route>
+        <Route path="/edit/:id">
+          <Grid container justify="center" className={classes.root}>
+            <Grid item xs={12} sm={10} md={8}>
+              <SubjectEdit />
             </Grid>
           </Grid>
         </Route>

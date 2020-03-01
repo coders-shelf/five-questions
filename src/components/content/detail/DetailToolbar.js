@@ -23,8 +23,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DetailToolbar = props => {
+  const { title, id, handleDelete } = props;
   const classes = useStyles();
-  const title = "React";
+
   return (
     <Toolbar variant="dense" className={classes.root} disableGutters={true}>
       <Link to="/" className={classes.link}>
@@ -39,10 +40,21 @@ const DetailToolbar = props => {
       </Link>
       <h1>{title}</h1>
       <div>
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          component={Link}
+          to={`/edit/${id}`}
+        >
           <EditOutlinedIcon />
         </IconButton>
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={() => handleDelete(id)}
+        >
           <DeleteOutlineIcon />
         </IconButton>
         <IconButton edge="start" color="inherit" aria-label="menu">
