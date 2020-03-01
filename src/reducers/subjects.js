@@ -34,7 +34,7 @@ const subjects = (state = initialState, action) => {
     case ACTION_TYPES.GET_SUBJECT:
       return {
         ...state,
-        subject: state.subjectList.find(item => item.id === action.payload)
+        subject: { ...action.payload.data, id: action.payload.id }
       };
     default:
       return state;

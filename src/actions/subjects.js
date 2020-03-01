@@ -95,9 +95,18 @@ const deleteSubjectSuccess = id => {
   };
 };
 
-export const getSubject = id => {
+export const getSubject = id => async dispatch => {
+  try {
+    const result = await axios.get(`/subject/${id}.json`);
+    dispatch(getSubjectSuccess(id, result.data));
+  } catch (error) {
+    dispatch(apiFailed("get subject failed"));
+  }
+};
+
+const getSubjectSuccess = (id, data) => {
   return {
     type: ACTION_TYPES.GET_SUBJECT,
-    payload: id
+    payload: { id: id, data: data }
   };
 };
