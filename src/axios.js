@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://five-questions-77934.firebaseio.com/"
+  baseURL: "https://experiment-4cca3.firebaseio.com/"
   // timeout: 2000
 });
 
