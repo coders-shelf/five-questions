@@ -1,6 +1,14 @@
+// Subject
 export const CREATE_SUBJECT = "CREATE_SUBJECT";
 export const READ_SUBJECT = "READ_SUBJECT";
 export const UPDATE_SUBJECT = "UPDATE_SUBJECT";
 export const DELETE_SUBJECT = "DELETE_SUBJECT";
 export const GET_SUBJECT = "GET_SUBJECT";
+
+// Question & Answer
+export const CREATE_INITIAL_QUESTIONS = "CREATE_INITIAL_QUESTIONS";
+export const READ_QUESTION_ANSWERS = "READ_QUESTION_ANSWERS";
+export const UPDATE_QUESTION_ANSWERS = "UPDATE_QUESTION_ANSWERS";
+
+// General
 export const API_FAILED = "API_FAILED";

@@ -1,4 +1,9 @@
 import * as ACTION_TYPES from "../actions/actionTypes";
+import { apiFailed } from "./index";
+import {
+  createInitialQuestion,
+  deleteQuestionAnswers
+} from "./questionAnswers";
 import axios from "../axios";
 
 export const createSubject = data => async dispatch => {
@@ -6,6 +11,7 @@ export const createSubject = data => async dispatch => {
   try {
     const result = await axios.post("/subject.json", subject);
     dispatch(createSubjectSuccess(data, result.data.name));
+    dispatch(createInitialQuestion(result.data.name));
   } catch (error) {
     dispatch(apiFailed("create subject failed"));
   }
@@ -18,15 +24,6 @@ const createSubjectSuccess = (data, id) => {
       id: id,
       title: data.title,
       image: "/image"
-    }
-  };
-};
-
-const apiFailed = message => {
-  return {
-    type: ACTION_TYPES.API_FAILED,
-    payload: {
-      message: message
     }
   };
 };
@@ -83,6 +80,7 @@ export const deleteSubject = id => async dispatch => {
   try {
     await axios.delete(`/subject/${id}.json`);
     dispatch(deleteSubjectSuccess(id));
+    dispatch(deleteQuestionAnswers(id));
   } catch (error) {
     dispatch(apiFailed("delete subject failed"));
   }
@@ -98,15 +96,22 @@ const deleteSubjectSuccess = id => {
 export const getSubject = id => async dispatch => {
   try {
     const result = await axios.get(`/subject/${id}.json`);
-    dispatch(getSubjectSuccess(id, result.data));
+    const questionAnswers = await axios.get(`qa/${id}.json`);
+    dispatch(getSubjectSuccess(id, result.data, questionAnswers.data));
   } catch (error) {
     dispatch(apiFailed("get subject failed"));
   }
 };
 
-const getSubjectSuccess = (id, data) => {
+const getSubjectSuccess = (id, subjectData, questionAnswers) => {
+  let qas = { questions: {}, answers: {} };
+  Object.keys(questionAnswers).forEach(key => {
+    key.startsWith("q")
+      ? (qas["questions"][key] = questionAnswers[key])
+      : (qas["answers"][key] = questionAnswers[key]);
+  });
   return {
     type: ACTION_TYPES.GET_SUBJECT,
-    payload: { id: id, data: data }
+    payload: { id: id, data: subjectData, questionAnswers: qas }
   };
 };

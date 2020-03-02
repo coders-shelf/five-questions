@@ -3,11 +3,21 @@ import Question from "./Question";
 import Answer from "./Answer";
 
 const QuestionAnswer = props => {
-  const { question, answer } = props;
+  const {
+    question,
+    answer,
+    register,
+    answerFieldName,
+    questionFieldName
+  } = props;
   return (
     <React.Fragment>
-      <Question question={question} />
-      <Answer answer={answer} />
+      <Question
+        question={question}
+        register={register}
+        name={questionFieldName}
+      />
+      <Answer answer={answer} register={register} name={answerFieldName} />
     </React.Fragment>
   );
 };

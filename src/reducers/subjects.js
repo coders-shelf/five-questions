@@ -1,7 +1,9 @@
 import * as ACTION_TYPES from "../actions/actionTypes";
 const initialState = {
   subjectList: [],
-  subject: {}
+  subject: {},
+  questions: {},
+  answers: {}
 };
 
 const subjects = (state = initialState, action) => {
@@ -14,7 +16,9 @@ const subjects = (state = initialState, action) => {
     case ACTION_TYPES.READ_SUBJECT:
       return {
         ...state,
-        subjectList: action.payload
+        subjectList: action.payload,
+        questions: {},
+        answers: {}
       };
     case ACTION_TYPES.UPDATE_SUBJECT:
       return {
@@ -34,8 +38,11 @@ const subjects = (state = initialState, action) => {
     case ACTION_TYPES.GET_SUBJECT:
       return {
         ...state,
-        subject: { ...action.payload.data, id: action.payload.id }
+        subject: { ...action.payload.data, id: action.payload.id },
+        questions: action.payload.questionAnswers.questions,
+        answers: action.payload.questionAnswers.answers
       };
+
     default:
       return state;
   }
