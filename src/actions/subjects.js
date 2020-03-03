@@ -4,7 +4,7 @@ import {
   createInitialQuestion,
   deleteQuestionAnswers
 } from "./questionAnswers";
-import { showBackdrop, hideBackdrop } from "./uiState";
+import { showBackdrop, hideBackdrop, showMessage } from "./uiState";
 import axios from "../axios";
 
 export const createSubject = data => async dispatch => {
@@ -13,6 +13,7 @@ export const createSubject = data => async dispatch => {
     const result = await axios.post("/subject.json", subject);
     dispatch(createSubjectSuccess(data, result.data.name));
     dispatch(createInitialQuestion(result.data.name));
+    dispatch(showMessage("新規作成に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("create subject failed"));
   }
@@ -67,6 +68,7 @@ export const updateSubject = data => async dispatch => {
   try {
     await axios.put(`/subject/${data.id}.json`, data);
     dispatch(updateSubjectSuccess(data));
+    dispatch(showMessage("更新に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("update subject failed"));
   }
@@ -84,6 +86,7 @@ export const deleteSubject = id => async dispatch => {
     await axios.delete(`/subject/${id}.json`);
     dispatch(deleteSubjectSuccess(id));
     dispatch(deleteQuestionAnswers(id));
+    dispatch(showMessage("削除に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("delete subject failed"));
   }

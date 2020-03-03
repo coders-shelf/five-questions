@@ -7,6 +7,7 @@ import ListView from "../content/ListView";
 import DetailView from "../content/DetailView";
 import SubjectCreate from "../content/form/SubjectCreate";
 import SubjectEdit from "../content/form/SubjectEdit";
+import Snackbar from "../utils/SnackBar";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,6 +19,7 @@ const Content = props => {
   const classes = useStyles();
   return (
     <Container>
+      <Snackbar />
       <Switch>
         <Route path="/detail/:id">
           <Grid container justify="center" className={classes.root}>

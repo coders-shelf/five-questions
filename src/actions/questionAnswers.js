@@ -2,6 +2,7 @@ import * as ACTION_TYPES from "./actionTypes";
 import axios from "../axios";
 import { apiFailed } from "./index";
 import { qas } from "../initialQuestions";
+import { showMessage } from "./uiState";
 
 export const createInitialQuestion = id => async dispatch => {
   try {
@@ -35,6 +36,7 @@ export const updateQuestionAnswers = (id, data) => async dispatch => {
   try {
     const result = await axios.put(`qa/${id}.json`, data);
     dispatch(updateQuestionAnswersSuccess(result.data));
+    dispatch(showMessage("保存に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("update question failed"));
   }

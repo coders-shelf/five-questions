@@ -13,6 +13,8 @@ export const UPDATE_QUESTION_ANSWERS = "UPDATE_QUESTION_ANSWERS";
 // UI State
 export const SHOW_BACKDROP = "SHOW_BACKDROP";
 export const HIDE_BACKDROP = "HIDE_BACKDROP";
+export const SHOW_MESSAGE = "SHOW_MESSAGE";
+export const HIDE_MESSAGE = "HIDE_MESSAGE";
 
 // General
 export const API_FAILED = "API_FAILED";
