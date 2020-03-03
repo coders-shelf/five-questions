@@ -4,6 +4,7 @@ import {
   createInitialQuestion,
   deleteQuestionAnswers
 } from "./questionAnswers";
+import { showBackdrop, hideBackdrop } from "./uiState";
 import axios from "../axios";
 
 export const createSubject = data => async dispatch => {
@@ -29,6 +30,7 @@ const createSubjectSuccess = (data, id) => {
 };
 
 export const readSubject = () => async dispatch => {
+  dispatch(showBackdrop());
   try {
     const result = await axios.get("/subject.json"); // 認証する場合は変更
     /* 
@@ -48,6 +50,7 @@ export const readSubject = () => async dispatch => {
       id: id
     }));
     dispatch(readSubjectSuccess(subjectList));
+    dispatch(hideBackdrop());
   } catch (error) {
     dispatch(apiFailed("read subject failed"));
   }
@@ -94,10 +97,12 @@ const deleteSubjectSuccess = id => {
 };
 
 export const getSubject = id => async dispatch => {
+  dispatch(showBackdrop());
   try {
     const result = await axios.get(`/subject/${id}.json`);
     const questionAnswers = await axios.get(`qa/${id}.json`);
     dispatch(getSubjectSuccess(id, result.data, questionAnswers.data));
+    dispatch(hideBackdrop());
   } catch (error) {
     dispatch(apiFailed("get subject failed"));
   }

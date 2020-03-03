@@ -10,6 +10,7 @@ import DetailToolbar from "./detail/DetailToolbar";
 import ExtraQuestion from "./detail/ExtraQuestion";
 import { getSubject, deleteSubject } from "../../actions/subjects";
 import { updateQuestionAnswers } from "../../actions/questionAnswers";
+import Backdrop from "../utils/Backdrop";
 
 const DetailView = props => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const DetailView = props => {
   const item = useSelector(state => state.subjects.subject);
   const questions = useSelector(state => state.subjects.questions);
   const answers = useSelector(state => state.subjects.answers);
-
+  const showBackdrop = useSelector(state => state.uiState.showBackdrop);
   useEffect(() => {
     dispatch(getSubject(id));
   }, [dispatch, id]);
@@ -33,47 +34,54 @@ const DetailView = props => {
     dispatch(updateQuestionAnswers(id, data));
   };
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <DetailToolbar
-          title={item.title}
-          id={item.id}
-          handleDelete={subjectDelete}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={5}>
-            {Object.keys(questions).map(ky => {
-              const answerKey = ky.replace("q", "a");
-              return (
-                <Grid item key={ky} xs={12}>
-                  <QuestionAnswer
-                    question={questions[ky]}
-                    answerFieldName={answerKey}
-                    questionFieldName={ky}
-                    answer={answers[answerKey]}
-                    register={register}
-                  />
-                </Grid>
-              );
-            })}
-            <Grid item xs={12}>
-              <ExtraQuestion />
+  let detail;
+  if (showBackdrop) {
+    detail = <Backdrop showBackdrop={showBackdrop} />;
+  } else {
+    detail = (
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <DetailToolbar
+            title={item.title}
+            id={item.id}
+            handleDelete={subjectDelete}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={5}>
+              {Object.keys(questions).map(ky => {
+                const answerKey = ky.replace("q", "a");
+                return (
+                  <Grid item key={ky} xs={12}>
+                    <QuestionAnswer
+                      question={questions[ky]}
+                      answerFieldName={answerKey}
+                      questionFieldName={ky}
+                      answer={answers[answerKey]}
+                      register={register}
+                    />
+                  </Grid>
+                );
+              })}
+              <Grid item xs={12}>
+                <ExtraQuestion />
+              </Grid>
+              <Grid item xs={12}>
+                <Box textAlign="center">
+                  <Button variant="contained" color="primary" type="submit">
+                    Save
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Box textAlign="center">
-                <Button variant="contained" color="primary" type="submit">
-                  Save
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </form>
+          </form>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }
+
+  return <React.Fragment>{detail}</React.Fragment>;
 };
 
 export default DetailView;

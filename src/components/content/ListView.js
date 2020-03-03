@@ -7,6 +7,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import MediaCard from "./list/MediaCard";
 import { readSubject } from "../../actions/subjects";
+import Backdrop from "../utils/Backdrop";
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -21,7 +22,19 @@ const ListView = props => {
   useEffect(() => {
     dispatch(readSubject());
   }, [dispatch]);
-
+  const showBackdrop = useSelector(state => state.uiState.showBackdrop);
+  let list;
+  if (showBackdrop) {
+    list = <Backdrop showBackdrop={showBackdrop} />;
+  } else {
+    list = items.map(item => (
+      <Grid item key={item.id}>
+        <Link to={`/detail/${item.id}`} className={classes.link}>
+          <MediaCard title={item.title} />
+        </Link>
+      </Grid>
+    ));
+  }
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -33,14 +46,7 @@ const ListView = props => {
           </Link>
         </Box>
       </Grid>
-
-      {items.map(item => (
-        <Grid item key={item.id}>
-          <Link to={`/detail/${item.id}`} className={classes.link}>
-            <MediaCard title={item.title} />
-          </Link>
-        </Grid>
-      ))}
+      {list}
     </React.Fragment>
   );
 };
