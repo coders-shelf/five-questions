@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getItem } from "../utils/tokenUtils";
 
 const instance = axios.create({
   baseURL: "https://five-questions-77934.firebaseio.com/"
@@ -10,7 +11,7 @@ instance.interceptors.request.use(
   config => {
     // リクエストが送られる「前に」実行される
     // 例えば、トークンを設定する
-    // request.headers.common["Authorization"] = "AUTH_TOKEN";
+    config.url += "?auth=" + getItem("token");
     return config;
   },
   error => {

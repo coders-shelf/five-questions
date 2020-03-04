@@ -16,5 +16,9 @@ export const HIDE_BACKDROP = "HIDE_BACKDROP";
 export const SHOW_MESSAGE = "SHOW_MESSAGE";
 export const HIDE_MESSAGE = "HIDE_MESSAGE";
 
+// Auth
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_OUT = "SIGN_OUT";
+
 // General
 export const API_FAILED = "API_FAILED";

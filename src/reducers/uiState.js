@@ -30,8 +30,7 @@ const uiState = (state = initialState, action) => {
       return {
         ...state,
         showMessage: false,
-        message: "",
-        messageType: "success"
+        message: ""
       };
     default:
       return state;

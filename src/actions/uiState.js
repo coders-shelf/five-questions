@@ -1,7 +1,6 @@
 import * as ACTION_TYPES from "../actions/actionTypes";
 
 export const showBackdrop = () => {
-  console.log("backdrop");
   return {
     type: ACTION_TYPES.SHOW_BACKDROP
   };

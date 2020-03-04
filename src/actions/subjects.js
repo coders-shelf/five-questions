@@ -5,12 +5,14 @@ import {
   deleteQuestionAnswers
 } from "./questionAnswers";
 import { showBackdrop, hideBackdrop, showMessage } from "./uiState";
-import axios from "../axios";
+import axios from "../axios/axios";
+import { getUserId } from "../utils/tokenUtils";
 
 export const createSubject = data => async dispatch => {
   const subject = { title: data.title, image: "" };
   try {
-    const result = await axios.post("/subject.json", subject);
+    const userId = getUserId();
+    const result = await axios.post(`/${userId}/subject.json`, subject);
     dispatch(createSubjectSuccess(data, result.data.name));
     dispatch(createInitialQuestion(result.data.name));
     dispatch(showMessage("新規作成に成功しました。", "success"));
@@ -33,7 +35,8 @@ const createSubjectSuccess = (data, id) => {
 export const readSubject = () => async dispatch => {
   dispatch(showBackdrop());
   try {
-    const result = await axios.get("/subject.json"); // 認証する場合は変更
+    const userId = getUserId();
+    const result = await axios.get(`/${userId}/subject.json`);
     /* 
       result: {
         data : {
@@ -53,7 +56,7 @@ export const readSubject = () => async dispatch => {
     dispatch(readSubjectSuccess(subjectList));
     dispatch(hideBackdrop());
   } catch (error) {
-    dispatch(apiFailed("read subject failed"));
+    dispatch(hideBackdrop());
   }
 };
 
@@ -66,7 +69,8 @@ const readSubjectSuccess = subjectList => {
 
 export const updateSubject = data => async dispatch => {
   try {
-    await axios.put(`/subject/${data.id}.json`, data);
+    const userId = getUserId();
+    await axios.put(`/${userId}/subject/${data.id}.json`, data);
     dispatch(updateSubjectSuccess(data));
     dispatch(showMessage("更新に成功しました。", "success"));
   } catch (error) {
@@ -83,7 +87,8 @@ const updateSubjectSuccess = data => {
 
 export const deleteSubject = id => async dispatch => {
   try {
-    await axios.delete(`/subject/${id}.json`);
+    const userId = getUserId();
+    await axios.delete(`/${userId}/subject/${id}.json`);
     dispatch(deleteSubjectSuccess(id));
     dispatch(deleteQuestionAnswers(id));
     dispatch(showMessage("削除に成功しました。", "success"));
@@ -102,8 +107,9 @@ const deleteSubjectSuccess = id => {
 export const getSubject = id => async dispatch => {
   dispatch(showBackdrop());
   try {
-    const result = await axios.get(`/subject/${id}.json`);
-    const questionAnswers = await axios.get(`qa/${id}.json`);
+    const userId = getUserId();
+    const result = await axios.get(`/${userId}/subject/${id}.json`);
+    const questionAnswers = await axios.get(`/${userId}/qa/${id}.json`);
     dispatch(getSubjectSuccess(id, result.data, questionAnswers.data));
     dispatch(hideBackdrop());
   } catch (error) {

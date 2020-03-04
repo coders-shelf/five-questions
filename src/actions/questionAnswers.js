@@ -1,8 +1,9 @@
 import * as ACTION_TYPES from "./actionTypes";
-import axios from "../axios";
+import axios from "../axios/axios";
 import { apiFailed } from "./index";
-import { qas } from "../initialQuestions";
+import { qas } from "../utils/initialQuestions";
 import { showMessage } from "./uiState";
+import { getUserId } from "../utils/tokenUtils";
 
 export const createInitialQuestion = id => async dispatch => {
   try {
@@ -26,7 +27,8 @@ export const createInitialQuestion = id => async dispatch => {
         putの場合は目的通りの形になるが、データを追加すると古いデータが上書き消去されてしまう。
         そのためpatchである必要がある。
        */
-    await axios.patch("/qa.json", { [id]: qas });
+    const userId = getUserId();
+    await axios.patch(`/${userId}/qa.json`, { [id]: qas });
   } catch (error) {
     dispatch(apiFailed("create initial question failed"));
   }
@@ -34,7 +36,8 @@ export const createInitialQuestion = id => async dispatch => {
 
 export const updateQuestionAnswers = (id, data) => async dispatch => {
   try {
-    const result = await axios.put(`qa/${id}.json`, data);
+    const userId = getUserId();
+    const result = await axios.put(`/${userId}/qa/${id}.json`, data);
     dispatch(updateQuestionAnswersSuccess(result.data));
     dispatch(showMessage("保存に成功しました。", "success"));
   } catch (error) {
@@ -50,7 +53,8 @@ const updateQuestionAnswersSuccess = data => {
 
 export const deleteQuestionAnswers = id => async dispatch => {
   try {
-    await axios.delete(`qa/${id}.json`);
+    const userId = getUserId();
+    await axios.delete(`/${userId}/qa/${id}.json`);
   } catch (error) {
     dispatch(apiFailed("delete question failed"));
   }
