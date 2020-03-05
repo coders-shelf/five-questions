@@ -11,7 +11,7 @@ import SubjectEdit from "../content/form/SubjectEdit";
 import Snackbar from "../utils/SnackBar";
 import SignInView from "../content/SignInView";
 import SignUpView from "../content/SignUpView";
-import SignOut from "../content/SignOut";
+import SignOut from "../content/auth/SignOut";
 import { checkToken } from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
@@ -67,11 +67,7 @@ const Content = props => {
     route = (
       <Switch>
         <Route path="/signin">
-          <Grid container justify="center" className={classes.root}>
-            <Grid item maxwidth="xs">
-              <SignInView />
-            </Grid>
-          </Grid>
+          <SignInView />
         </Route>
         <Route path="/signup">
           <Grid container justify="center" className={classes.root}>
