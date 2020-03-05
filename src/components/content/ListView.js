@@ -30,7 +30,7 @@ const ListView = props => {
     list = items.map(item => (
       <Grid item key={item.id}>
         <Link to={`/detail/${item.id}`} className={classes.link}>
-          <MediaCard title={item.title} />
+          <MediaCard title={item.title} imageUrl={item.image} />
         </Link>
       </Grid>
     ));
