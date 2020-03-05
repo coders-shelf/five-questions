@@ -4,13 +4,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import QuestionAnswer from "./detail/QuestionAnswer";
 import DetailToolbar from "./detail/DetailToolbar";
 import ExtraQuestion from "./detail/ExtraQuestion";
+import Backdrop from "../utils/Backdrop";
+import SubmitButton from "../utils/SubmitButton";
 import { getSubject, deleteSubject } from "../../actions/subjects";
 import { updateQuestionAnswers } from "../../actions/questionAnswers";
-import Backdrop from "../utils/Backdrop";
 
 const DetailView = props => {
   const dispatch = useDispatch();
@@ -69,9 +69,7 @@ const DetailView = props => {
               </Grid>
               <Grid item xs={12}>
                 <Box textAlign="center">
-                  <Button variant="contained" color="primary" type="submit">
-                    Save
-                  </Button>
+                  <SubmitButton text="保存" />
                 </Box>
               </Grid>
             </Grid>

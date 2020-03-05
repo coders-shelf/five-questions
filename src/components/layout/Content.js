@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import ListView from "../content/ListView";
 import DetailView from "../content/DetailView";
 import SubjectCreate from "../content/form/SubjectCreate";
@@ -12,16 +10,11 @@ import Snackbar from "../utils/SnackBar";
 import SignInView from "../content/SignInView";
 import SignUpView from "../content/SignUpView";
 import SignOut from "../content/auth/SignOut";
+import LargeLayout from "../layout/LargeLayout";
+import MiddleLayout from "../layout/MiddleLayout";
 import { checkToken } from "../../actions/auth";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginTop: 5
-  }
-}));
-
 const Content = props => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const isAuth = useSelector(state => state.auth.isAuth);
   useEffect(() => {
@@ -32,33 +25,27 @@ const Content = props => {
     route = (
       <Switch>
         <Route path="/detail/:id">
-          <Grid container justify="center" className={classes.root}>
-            <Grid item xs={12} sm={10} md={8}>
-              <DetailView />
-            </Grid>
-          </Grid>
+          <MiddleLayout>
+            <DetailView />
+          </MiddleLayout>
         </Route>
         <Route path="/create">
-          <Grid container justify="center" className={classes.root}>
-            <Grid item xs={12} sm={10} md={8}>
-              <SubjectCreate />
-            </Grid>
-          </Grid>
+          <MiddleLayout>
+            <SubjectCreate />
+          </MiddleLayout>
         </Route>
         <Route path="/edit/:id">
-          <Grid container justify="center" className={classes.root}>
-            <Grid item xs={12} sm={10} md={8}>
-              <SubjectEdit />
-            </Grid>
-          </Grid>
+          <MiddleLayout>
+            <SubjectEdit />
+          </MiddleLayout>
         </Route>
         <Route path="/signout">
           <SignOut />
         </Route>
         <Route exact path="/">
-          <Grid container spacing={5} justify="center" className={classes.root}>
+          <LargeLayout>
             <ListView />
-          </Grid>
+          </LargeLayout>
         </Route>
         <Redirect to="/" />
       </Switch>
@@ -70,11 +57,7 @@ const Content = props => {
           <SignInView />
         </Route>
         <Route path="/signup">
-          <Grid container justify="center" className={classes.root}>
-            <Grid item maxwidth="xs">
-              <SignUpView />
-            </Grid>
-          </Grid>
+          <SignUpView />
         </Route>
         <Redirect to="/signin" />
       </Switch>

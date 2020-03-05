@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import SubmitButton from "../../utils/SubmitButton";
 
 const SubjectForm = props => {
   const { handleSubmit, register, onSubmit, title } = props;
@@ -17,9 +17,7 @@ const SubjectForm = props => {
         defaultValue={title}
       />
       <Box textAlign="center" mt={2}>
-        <Button variant="contained" color="primary" type="submit">
-          Save
-        </Button>
+        <SubmitButton text="保存" />
       </Box>
     </form>
   );

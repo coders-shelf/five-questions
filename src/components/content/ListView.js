@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import MediaCard from "./list/MediaCard";
-import { readSubject } from "../../actions/subjects";
 import Backdrop from "../utils/Backdrop";
+import LinkButton from "../utils/LinkButton";
+import { readSubject } from "../../actions/subjects";
 
 const useStyles = makeStyles(theme => ({
   link: {
@@ -39,11 +39,7 @@ const ListView = props => {
     <React.Fragment>
       <Grid item xs={12}>
         <Box textAlign="center">
-          <Link to="/create" className={classes.link}>
-            <Button variant="contained" color="primary">
-              Create
-            </Button>
-          </Link>
+          <LinkButton path="/create" text="新規作成" />
         </Box>
       </Grid>
       {list}
