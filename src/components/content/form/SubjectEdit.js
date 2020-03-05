@@ -13,7 +13,7 @@ const SubjectEdit = () => {
   const { register, handleSubmit } = useForm();
   const onSubmit = data => {
     data.id = item.id;
-    dispatch(updateSubject(data));
+    dispatch(updateSubject(data, item.imageName, item.image));
     history.push("/detail/" + item.id);
   };
   return (
@@ -23,6 +23,7 @@ const SubjectEdit = () => {
         register={register}
         onSubmit={onSubmit}
         title={item.title}
+        imageUrl={item.image}
       />
     </SubjectFormLayout>
   );

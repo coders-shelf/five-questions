@@ -5,7 +5,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Image from "../../../assets/react-image.png";
+import Image from "../../../assets/ImageNotFound.png";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,15 +18,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MediaCard = props => {
-  const { title } = props;
+  const { title, imageUrl } = props;
   const classes = useStyles();
-
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={Image}
+          image={imageUrl ? imageUrl : Image}
           title="Contemplative Reptile"
         />
         <CardContent>

@@ -26,7 +26,7 @@ const DetailView = props => {
   }, [dispatch, id]);
 
   const subjectDelete = id => {
-    dispatch(deleteSubject(id));
+    dispatch(deleteSubject(id, item.imageName));
     history.push("/");
   };
 
