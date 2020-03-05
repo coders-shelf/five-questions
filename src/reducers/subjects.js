@@ -20,6 +20,14 @@ const subjects = (state = initialState, action) => {
         questions: {},
         answers: {}
       };
+    case ACTION_TYPES.READ_SUBJECT_FAILED:
+      return {
+        ...state,
+        subjectList: [],
+        subject: {},
+        questions: {},
+        answers: {}
+      };
     case ACTION_TYPES.UPDATE_SUBJECT:
       return {
         ...state,

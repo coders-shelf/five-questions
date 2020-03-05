@@ -56,6 +56,7 @@ export const readSubject = () => async dispatch => {
     dispatch(readSubjectSuccess(subjectList));
     dispatch(hideBackdrop());
   } catch (error) {
+    dispatch(readSubjectFail());
     dispatch(hideBackdrop());
   }
 };
@@ -64,6 +65,12 @@ const readSubjectSuccess = subjectList => {
   return {
     type: ACTION_TYPES.READ_SUBJECT,
     payload: subjectList
+  };
+};
+
+const readSubjectFail = () => {
+  return {
+    type: ACTION_TYPES.READ_SUBJECT_FAILED
   };
 };
 
