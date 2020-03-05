@@ -6,14 +6,17 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { hideMessage } from "../../actions/uiState";
 
 const TransitionUp = props => {
+  // スライド表示のため。directionで方向を指定。
   return <Slide {...props} direction="up" />;
 };
 
 const Alert = React.forwardRef((props, ref) => {
+  // アラートのデザインを使用するため。ドキュメントを要参照。
+  // forwardRef・refの指定はスライド表示のために必要
   return <MuiAlert ref={ref} elevation={6} variant="filled" {...props} />;
 });
 
-const CustomizedSnackbars = props => {
+const CustomizedSnackbars = () => {
   const dispatch = useDispatch();
   const open = useSelector(state => state.uiState.showMessage);
   const type = useSelector(state => state.uiState.messageType);
@@ -24,10 +27,10 @@ const CustomizedSnackbars = props => {
   return (
     <Snackbar
       open={open}
-      autoHideDuration={3000}
+      autoHideDuration={3000} // 表示時間の指定
       onClose={handleClose}
       TransitionComponent={TransitionUp}
-      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }} // 表示する場所の指定
     >
       <Alert onClose={handleClose} severity={type}>
         {message}

@@ -104,6 +104,11 @@ const deleteSubjectSuccess = id => {
   };
 };
 
+/**
+ * Subjectとそれに対応するQuestion, Answerを取得する
+ *
+ * @param {String} id - SubjectのID
+ */
 export const getSubject = id => async dispatch => {
   dispatch(showBackdrop());
   try {
@@ -119,6 +124,17 @@ export const getSubject = id => async dispatch => {
 
 const getSubjectSuccess = (id, subjectData, questionAnswers) => {
   let qas = { questions: {}, answers: {} };
+  /*
+    {
+      "q1": "",
+      "q2": "",
+      ...
+      "a1": "",
+      "a2": "",
+      ...
+    }
+    の形になっているのでQuestionとAnswerのオブジェクトを分ける
+  */
   Object.keys(questionAnswers).forEach(key => {
     key.startsWith("q")
       ? (qas["questions"][key] = questionAnswers[key])

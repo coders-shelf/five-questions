@@ -3,8 +3,8 @@ import * as ACTION_TYPES from "../actions/actionTypes";
 const initialState = {
   showBackdrop: false,
   showMessage: false,
-  message: "",
-  messageType: "success"
+  message: "", // snackbarに表示する内容
+  messageType: "success" // success, info, warning, errorの中から選択
 };
 
 const uiState = (state = initialState, action) => {

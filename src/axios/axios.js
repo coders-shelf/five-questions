@@ -16,13 +16,14 @@ instance.interceptors.request.use(
   },
   error => {
     // then/catchの処理の「前に」実行されるエラーハンドリング
-    console.log("=== Request Failed ===");
+    // console.log("=== Request Failed ===");
     return Promise.reject(error);
   }
 );
 
 // レスポンスのインタセプター
 // then/catchの処理の「前に」実行される
+/*
 instance.interceptors.response.use(
   response => {
     console.log("=== Success ===");
@@ -33,5 +34,6 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+*/
 
 export default instance;
