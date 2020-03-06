@@ -1,9 +1,8 @@
 import * as ACTION_TYPES from "./actionTypes";
-import axios from "../axios/axios";
 import { apiFailed } from "./index";
 import { qas } from "../utils/initialQuestions";
 import { showMessage } from "./uiState";
-import { getUserId } from "../utils/tokenUtils";
+import firebase from "../firebase/firebase";
 
 export const createInitialQuestion = id => async dispatch => {
   try {
@@ -27,8 +26,11 @@ export const createInitialQuestion = id => async dispatch => {
         putの場合は目的通りの形になるが、データを追加すると古いデータが上書き消去されてしまう。
         そのためpatchである必要がある。
        */
-    const userId = getUserId();
-    await axios.patch(`/${userId}/qa.json`, { [id]: qas });
+    const userId = firebase.auth().currentUser.uid;
+    await firebase
+      .database()
+      .ref(`${userId}/qa/${id}`)
+      .update(qas);
   } catch (error) {
     dispatch(apiFailed("create initial question failed"));
   }
@@ -36,16 +38,19 @@ export const createInitialQuestion = id => async dispatch => {
 
 export const updateQuestionAnswers = (id, data) => async dispatch => {
   try {
-    const userId = getUserId();
-    const result = await axios.put(`/${userId}/qa/${id}.json`, data);
-    dispatch(updateQuestionAnswersSuccess(result.data));
+    const userId = firebase.auth().currentUser.uid;
+    await firebase
+      .database()
+      .ref(`${userId}/qa/${id}`)
+      .update(data);
+    dispatch(updateQuestionAnswersSuccess());
     dispatch(showMessage("保存に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("update question failed"));
   }
 };
 
-const updateQuestionAnswersSuccess = data => {
+const updateQuestionAnswersSuccess = () => {
   return {
     type: ACTION_TYPES.UPDATE_QUESTION_ANSWERS
   };
@@ -53,8 +58,11 @@ const updateQuestionAnswersSuccess = data => {
 
 export const deleteQuestionAnswers = id => async dispatch => {
   try {
-    const userId = getUserId();
-    await axios.delete(`/${userId}/qa/${id}.json`);
+    const userId = firebase.auth().currentUser.uid;
+    await firebase
+      .database()
+      .ref(`${userId}/qa/${id}`)
+      .remove();
   } catch (error) {
     dispatch(apiFailed("delete question failed"));
   }

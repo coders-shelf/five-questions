@@ -12,13 +12,13 @@ import SignUpView from "../content/SignUpView";
 import SignOut from "../content/auth/SignOut";
 import LargeLayout from "../layout/LargeLayout";
 import MiddleLayout from "../layout/MiddleLayout";
-import { checkToken } from "../../actions/auth";
+import { checkUser } from "../../actions/auth";
 
 const Content = props => {
   const dispatch = useDispatch();
   const isAuth = useSelector(state => state.auth.isAuth);
   useEffect(() => {
-    dispatch(checkToken());
+    dispatch(checkUser());
   }, [dispatch]);
   let route;
   if (isAuth) {

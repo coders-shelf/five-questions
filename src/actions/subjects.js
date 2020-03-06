@@ -5,13 +5,11 @@ import {
   deleteQuestionAnswers
 } from "./questionAnswers";
 import { showBackdrop, hideBackdrop, showMessage } from "./uiState";
-import axios from "../axios/axios";
-import { getUserId } from "../utils/tokenUtils";
 import firebase, { storage } from "../firebase/firebase";
 
 export const createSubject = data => async dispatch => {
   try {
-    const userId = getUserId();
+    const userId = firebase.auth().currentUser.uid;
     // アップロード処理
     const imageName = new Date().toISOString() + data.image[0].name;
     const imageUrl = await uploadTaskPromise(data.image[0], imageName, userId);
@@ -20,9 +18,18 @@ export const createSubject = data => async dispatch => {
       image: imageUrl,
       imageName: imageName
     };
-    const result = await axios.post(`/${userId}/subject.json`, subject);
-    dispatch(createSubjectSuccess(data, result.data.name, imageUrl));
-    dispatch(createInitialQuestion(result.data.name));
+    const newSubjectKey = firebase
+      .database()
+      .ref(`${userId}/subject`)
+      .push().key;
+
+    await firebase
+      .database()
+      .ref(`${userId}/subject/${newSubjectKey}`)
+      .update(subject);
+
+    dispatch(createSubjectSuccess(data, newSubjectKey, imageUrl));
+    dispatch(createInitialQuestion(newSubjectKey));
     dispatch(showMessage("新規作成に成功しました。", "success"));
   } catch (error) {
     dispatch(apiFailed("作成に失敗しました。もう一度試して下さい。"));
@@ -65,22 +72,13 @@ async function uploadTaskPromise(image, imageName, userId) {
 export const readSubject = () => async dispatch => {
   dispatch(showBackdrop());
   try {
-    const userId = getUserId();
-    const result = await axios.get(`/${userId}/subject.json`);
-    /* 
-      result: {
-        data : {
-          id: {
-            title: "",
-            image: ""
-          }
-        }
-      }
-      の形を下の形式に変更
-      {id: "", title: "", image: ""}
-    */
-    const subjectList = Object.keys(result.data).map(id => ({
-      ...result.data[id],
+    const userId = firebase.auth().currentUser.uid;
+    const subjectObject = await firebase
+      .database()
+      .ref(`${userId}/subject`)
+      .once("value");
+    const subjectList = Object.keys(subjectObject.val()).map(id => ({
+      ...subjectObject.val()[id],
       id: id
     }));
     dispatch(readSubjectSuccess(subjectList));
@@ -110,16 +108,28 @@ export const updateSubject = (
   oldImageUrl
 ) => async dispatch => {
   try {
-    const userId = getUserId();
+    const userId = firebase.auth().currentUser.uid;
     let imageUrl = oldImageUrl; // 画像の更新がなければ元のURLをセットする.
+    console.log(data);
     // data.imageはFileListなので注意
     if (data.image.length !== 0) {
+      // 画像の更新がある場合
       const imageName = new Date().toISOString() + data.image[0].name;
       imageUrl = await uploadTaskPromise(data.image[0], imageName, userId);
       data.image = imageUrl;
       data.imageName = imageName;
-      await axios.put(`/${userId}/subject/${data.id}.json`, data);
+      await firebase
+        .database()
+        .ref(`${userId}/subject/${data.id}`)
+        .update(data);
       await storage.ref(`/images/${userId}/${oldImageName}`).delete();
+    } else {
+      // 画像の更新がない場合
+      delete data.image; // imageが空のFileListになっているので削除しておく
+      await firebase
+        .database()
+        .ref(`${userId}/subject/${data.id}`)
+        .update(data);
     }
     dispatch(updateSubjectSuccess(data, imageUrl));
     dispatch(showMessage("更新に成功しました。", "success"));
@@ -140,8 +150,12 @@ const updateSubjectSuccess = (data, imageUrl) => {
 
 export const deleteSubject = (id, imageName) => async dispatch => {
   try {
-    const userId = getUserId();
-    await axios.delete(`/${userId}/subject/${id}.json`);
+    const userId = firebase.auth().currentUser.uid;
+    await firebase
+      .database()
+      .ref(`${userId}/subject/${id}`)
+      .remove();
+
     dispatch(deleteSubjectSuccess(id));
     dispatch(deleteQuestionAnswers(id));
     // delete image
@@ -167,13 +181,19 @@ const deleteSubjectSuccess = id => {
 export const getSubject = id => async dispatch => {
   dispatch(showBackdrop());
   try {
-    const userId = getUserId();
-    const result = await axios.get(`/${userId}/subject/${id}.json`);
-    const questionAnswers = await axios.get(`/${userId}/qa/${id}.json`);
-    dispatch(getSubjectSuccess(id, result.data, questionAnswers.data));
+    const userId = firebase.auth().currentUser.uid;
+    const subject = await firebase
+      .database()
+      .ref(`${userId}/subject/${id}`)
+      .once("value");
+    const questionAnswers = await firebase
+      .database()
+      .ref(`/${userId}/qa/${id}`)
+      .once("value");
+    dispatch(getSubjectSuccess(id, subject.val(), questionAnswers.val()));
     dispatch(hideBackdrop());
   } catch (error) {
-    dispatch(apiFailed("get subject failed"));
+    dispatch(apiFailed("データの取得に失敗しました。"));
   }
 };
 
